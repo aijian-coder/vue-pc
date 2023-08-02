@@ -1,0 +1,20 @@
+//导入一个清除样式的外部优雅resetCss
+// normalize.css  -->一个优雅的清除样式
+//全局导入
+@import "normalize.css";
+
+// 定义一些自己的css变量, 也可以去覆盖 element-plus 的变量
+//    :root:root 优先级是高于 :root
+:root:root {
+    --h5-color: green;
+    --h5-size: 16px;
+  
+    // --el-fill-color-blank: pink;
+  }
+  
+  html,
+  body,
+  #app {
+    height: 100%;
+  }
+  

@@ -17,6 +17,23 @@ const router= createRouter({
             path: "/",
             name: "index",
             component: () => import("../layout/index.vue"),
+            children:[
+                {
+                    path: "dashboard/monitor",
+                    name: "dashboard_monitor",
+                    component: () => import("../views/dashboard/monitor.vue"),
+                },
+                {
+                    path: "dashboard/console",
+                    name: "dashboard_console",
+                    component: () => import("../views/dashboard/console.vue"),
+                },
+                {
+                    path: "dashboard/workplace",
+                    name: "dashboard_workplace",
+                    component: () => import("../views/dashboard/workplace.vue"),
+                },
+            ]
         }
     ]
 

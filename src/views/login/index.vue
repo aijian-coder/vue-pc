@@ -63,11 +63,9 @@ export default {
                 captchaId:  this.$refs.captcha.captchaId,
             }
             console.log(params);
-
         },
         
-
-    },
+   },
 
 
 

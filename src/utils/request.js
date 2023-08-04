@@ -17,7 +17,7 @@ const instance = axios.create({
    *
    * TODO: 后续处理本地开发与生产上线的环境变量
    */
-  baseURL: "http://127.0.0.1:5173/api",
+  baseURL: "http://127.0.0.1:5174/api",
 
   /**
    * 超时时间，单位是 毫秒

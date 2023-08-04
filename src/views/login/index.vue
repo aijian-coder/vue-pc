@@ -1,6 +1,10 @@
 <template>
     <div class="page">
-        <el-form class="login-form" ref="form" label-width="100" :model="model" :rules="rules">
+        <el-form class="login-form" 
+        ref="form" 
+        label-width="100" 
+        :model="model" 
+        :rules="rules">
             <el-form-item label="Username" prop="username">
                 <el-input v-model="model.username" />
             </el-form-item>
@@ -12,7 +16,7 @@
                 <Captcha  ref="captcha"/>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" @click="handleLogin">Login</el-button>
+                <el-button type="primary" @click="handleLogin" :loading="loading">Login</el-button>
             </el-form-item>
         </el-form>
     </div>
@@ -28,6 +32,8 @@ export default {
     },
     data() {
         return {
+            // 是否正在登录中
+            loading: false,
             // 表单数据
             model: {
                 // 用户名
@@ -56,9 +62,10 @@ export default {
                 ...this.model,
                 captchaId:  this.$refs.captcha.captchaId,
             }
-            // console.log(params);
+            console.log(params);
 
         },
+        
 
     },
 

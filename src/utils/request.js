@@ -17,7 +17,8 @@ const instance = axios.create({
    *
    * TODO: 后续处理本地开发与生产上线的环境变量
    */
-  baseURL: "http://127.0.0.1:5174/api",
+  //基准地址
+  baseURL: "/api",
 
   /**
    * 超时时间，单位是 毫秒
@@ -28,10 +29,15 @@ const instance = axios.create({
    * 自定义请求头
    */
   headers: {
-    hello: "world",
+    hello: "aijc",
   },
 });
 
+/**
+ * 可以给自定义的 axios 实例添加拦截器。
+ * const instance = axios.create();
+ * instance.interceptors.request.use(function () { .... });
+ */
 /**
  * 请求拦截器
  */
@@ -42,9 +48,7 @@ instance.interceptors.request.use(
    *    2. 必须返回该 config
    */
   (config) => {
-    config.params = {
-      a: "b",
-    };
+   
     return config;
   },
   /**
@@ -77,9 +81,11 @@ instance.interceptors.response.use(
     // 2. 判断业务状态码
     if (data.code === 1000) {
       // 业务成功，直接返回 data.data
+      // ElMessage.success(data.message);
       return data.data;
     } else {
       // 业务失败，抛出错误，消息提示
+      //Element—plus弹窗ElMessage
       ElMessage.error(data.message);
       return Promise.reject(response);
     }

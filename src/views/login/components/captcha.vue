@@ -10,22 +10,22 @@ export default{
     data(){
         return{
             svg: "",
+            captchaId:"",
         }
     },
     methods:{
         refresh() {
-            axios
-                .get("/api/admin/base/open/captcha")
+            request
+                .get("/admin/base/open/captcha")
                 .then((response) => {
                     // console.log("response", response);
-                    const { data } = response;
-                    // 判断业务状态码
-                    if (data.code !== 1000) {
-                        return alert(data.message);
-                    }
+                    // console.log(response);
+                    const { data ,captchaId} = response;
                     // 将 data.data.data => this.svg
-                    this.svg = data.data.data;
-
+                    this.svg = data;
+                    //验证码id
+                    this.captchaId=captchaId
+                    // console.log(data.data.captchaId);
                     // console.log("this.svg", this.svg);
                 })
                 .catch((error) => {

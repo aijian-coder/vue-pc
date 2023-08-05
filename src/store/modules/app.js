@@ -1,6 +1,6 @@
 export default {
   namespaced: true,
-  status: {
+  state: {
     // 左侧菜单是否要收起
     collapsed: false,
   },
@@ -10,3 +10,5 @@ export default {
     },
   },
 };
+
+

@@ -2,8 +2,6 @@
  * deepTree
  * 此程序用作操作扁平数据，变成树形解构
  */
-
-
 export function deepTree(list) {
   //定义最终的结果集
   const result = [];
@@ -35,4 +33,3 @@ export function deepTree(list) {
   });
   return  result
 }
-// deepTree(list);

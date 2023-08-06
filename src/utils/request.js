@@ -51,11 +51,12 @@ instance.interceptors.request.use(
    *      1. 统一携带 token 到请求头中。
    */
   (config) => {
-    const token =store2.get("token");
-    if(token){
+    //借助store插件，拿到token，调接口的时候压迫默认在请求头里面携带Authorization:"token"
+    const token = store2.get("token");
+    if (token) {
       config.headers.Authorization = token;
     }
-   
+
     return config;
   },
   /**
@@ -78,7 +79,7 @@ instance.interceptors.response.use(
    * 成功的回调
    *    1. response 是 axios 的包装对象
    *    2. 必须要返回数据，返回的数据是 .then 的回调函数的参数'
-   * 
+   *
    *    触发时机：
    *      1. 接口请求成功，也就是 HTTP 状态码要为 2xx 或 304
    *      2. 会在业务代码的 .then 之前触发

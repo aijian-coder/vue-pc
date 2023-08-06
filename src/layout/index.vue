@@ -50,7 +50,7 @@ export default {
   background-color: red;
 
   &__left {
-    background: rgb(103, 227, 218);
+    background:rgb(84 92 100);
     width: 200px;
   }
 

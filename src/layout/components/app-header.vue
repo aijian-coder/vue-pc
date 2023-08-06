@@ -1,7 +1,7 @@
 <!-- 此组为右侧头部个人信息 -->
 <template>
   <div class="app-header">
-    <!-- 渲染左侧按钮，面包屑.. -->
+    <!-- 渲染左侧按钮，以及面包屑.. -->
     <div class="app-header__left">
       <div class="box2" @click="setCollapsed(!collapsed)">
         <el-icon size="28">
@@ -97,6 +97,6 @@ export default {
 .el-breadcrumb {
   margin-left: 10px;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 16px;
 }
 </style>

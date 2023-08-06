@@ -1,15 +1,21 @@
 <template>
-    <!-- <div>HELLO WORLD</div> -->
-    <div class="app-layout">
-        <div class="app-layout__left"></div>
-        <div class="app-layout__right">
-            <div class="app-layout__right--top"></div>
-            <div class="app-layout__right--container">
-                <!-- 渲染子路由 使用RouterView -->
-                <RouterView></RouterView>
-            </div>
-        </div>
+  <!-- <div>HELLO WORLD</div> -->
+  <div class="app-layout">
+    <div class="app-layout__left">
+      <!-- 左侧菜单栏 -->
+      <AppMenu></AppMenu>
     </div>
+    <div class="app-layout__right">
+      <div class="app-layout__right--top">
+        <!-- 右侧顶部信息栏 -->
+        <AppHeader />
+      </div>
+      <div class="app-layout__right--container">
+        <!-- 渲染子路由 使用RouterView -->
+        <RouterView></RouterView>
+      </div>
+    </div>
+  </div>
 </template>
 
 <!-- 
@@ -26,33 +32,44 @@
     规则：
         1. 当前组件的 data-v-xxx 的自定义属性，会在子组件的根元素上也携带
  -->
-<style  lang="scss" scoped>
+<script>
+import AppHeader from "./components/app-header.vue";
+import AppMenu from "./components/app-menu.vue";
+export default {
+  name: "layout",
+  components: {
+    AppHeader,
+    AppMenu,
+  },
+};
+</script>
+<style lang="scss" scoped>
 .app-layout {
+  display: flex;
+  height: 100%;
+  background-color: red;
+
+  &__left {
+    background: rgb(103, 227, 218);
+    width: 200px;
+  }
+
+  &__right {
     display: flex;
-    height: 100%;
-    background-color: red;
+    flex-direction: column;
+    flex: 1;
+    background-color: yellowgreen;
+    overflow: hidden;
 
-    &__left {
-        background: rgb(103, 227, 218);
-        width: 200px;
+    &--top {
+      background: #ccc;
+      height: 64px;
     }
 
-    &__right {
-        display: flex;
-        flex-direction: column;
-        flex: 1;
-        background-color: yellowgreen;
-        overflow: hidden;
-
-        &--top {
-            background: #ccc;
-            height: 64px;
-        }
-
-        &--container {
-            background: rgb(237, 97, 97);
-            flex: 1;
-        }
+    &--container {
+      background: rgb(237, 97, 97);
+      flex: 1;
     }
+  }
 }
 </style>

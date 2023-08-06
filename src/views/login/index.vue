@@ -14,7 +14,7 @@
         <el-input v-model="model.password" />
       </el-form-item>
       <el-form-item label="VerifyCode" class="captcha" prop="verifyCode">
-        <el-input class="captcha__input" v-model="model.verifyCode" />
+        <el-input class="captcha__input" v-model="model.verifyCode" @keyup.enter="handleLogin" />
         <Captcha ref="captcha" />
       </el-form-item>
       <el-form-item>
@@ -74,6 +74,7 @@ export default {
       //   console.log(this.$route);
       try {
         const data = await this.$store.dispatch("user/login", params);
+        await this.$store.dispatch("user/getPerson");
         this.loading = true;
         ElMessage({
           message: "登录成功",
@@ -82,7 +83,7 @@ export default {
           onClose: () => {
             // 消息关闭时的回调函数
             // 跳转页面
-            console.log(this.$route.query);
+            // console.log(this.$route.query);
             const redirect = this.$route.query.redirect || "/";
             this.$router.replace(redirect);
             this.loading = false;

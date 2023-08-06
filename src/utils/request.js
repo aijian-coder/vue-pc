@@ -3,6 +3,7 @@
  */
 
 import axios from "axios";
+import store2 from "store2";
 import { ElMessage } from "element-plus";
 
 // 创建一个 axios 的实例，并配置一些默认的参数
@@ -46,8 +47,14 @@ instance.interceptors.request.use(
    * 成功的回调
    *    1. config 是请求的配置对象
    *    2. 必须返回该 config
+   * 应用场景：
+   *      1. 统一携带 token 到请求头中。
    */
   (config) => {
+    const token =store2.get("token");
+    if(token){
+      config.headers.Authorization = token;
+    }
    
     return config;
   },
@@ -71,6 +78,7 @@ instance.interceptors.response.use(
    * 成功的回调
    *    1. response 是 axios 的包装对象
    *    2. 必须要返回数据，返回的数据是 .then 的回调函数的参数'
+   * 
    *    触发时机：
    *      1. 接口请求成功，也就是 HTTP 状态码要为 2xx 或 304
    *      2. 会在业务代码的 .then 之前触发

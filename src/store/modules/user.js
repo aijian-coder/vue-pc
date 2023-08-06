@@ -1,11 +1,12 @@
 import store2 from "store2";
-import {login} from "@/api/user"
+import {login,getUserInfo,logout} from "@/api/user"
+import router from "@/router";
 
 export default {
     namespaced: true,
     state: {
         token:store2.get("token")||"",//用户令牌
-        info:null,//用户信息对象
+        info: store2.get("info"), // 用户信息
       
     },
     mutations: {
@@ -15,6 +16,7 @@ export default {
         },
         setInfo(state, payload){
             state.info=payload
+            ; store2.set("info",payload)
         }
     },
     actions:{
@@ -23,7 +25,28 @@ export default {
             const res=await login(payload);
             commit("setToken", res.token);
             return res
+        },
+       /**
+        * 登出
+        */
+       async logout({commit},payload){
+       await logout();
 
+       // 清理数据
+    
+      store2.clearAll();
+      // 跳转路由
+      router.replace("/login");
+      
+    },
+
+        /**
+         * 获取个人信息
+         */
+        async getPerson({commit},payload){
+            const res=await getUserInfo(payload);
+            commit("setInfo", res.info);
+            return res
         }
     }
   };

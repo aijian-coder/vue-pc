@@ -6,6 +6,7 @@
       @open="handleOpen"
       @close="handleClose"
       @select="handleSelect"
+      :default-active="$route.path"
     >
       <!-- 动态渲染的menu的菜单页面 -->
       <!-- 借助一个prop 往子组件传递menu菜单的数据，prop的键名叫model，键值就是menu，每一个菜单的值 -->
@@ -28,9 +29,9 @@ export default {
   },
   methods: {
     // menu组件的方法，当某个组件的menu被选中高亮时，就会触发该方法，可以用来做路由跳转
-    //此处的index就是组件的每一个条目我主动携带的路由的值：menu.router
+    //此处的index就是组件的每一个条目,主动携带的路由的值：menu.router
     handleSelect(index) {
-      console.log("handleSelect", index);
+      // console.log("handleSelect", index);
       this.$router.push({
         path: index,
       });
@@ -40,4 +41,23 @@ export default {
   },
 };
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.app-menu{
+ 
+  .el-menu:not(.el-menu--collapse){
+    width: 200px;
+  }
+
+  .el-menu--collapse{
+    overflow: hidden;
+    ::v-deep(.title){
+    display: none;
+  }
+  ::v-deep(.el-sub-menu__icon-arrow) {
+      display: none;
+    }
+  }
+  
+
+}
+</style>

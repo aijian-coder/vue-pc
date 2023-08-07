@@ -5,6 +5,7 @@
 import axios from "axios";
 import store2 from "store2";
 import { ElMessage } from "element-plus";
+import store from "@/store";
 
 // 创建一个 axios 的实例，并配置一些默认的参数
 const instance = axios.create({
@@ -118,6 +119,8 @@ instance.interceptors.response.use(
       case 401:
         // 没有权限
         ElMessage.error(message);
+         // 退出登录，重新进入登录页面 ，传递一个false
+         store.dispatch("user/logout", false);
         break;
       case 502:
         // 没有权限

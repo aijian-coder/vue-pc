@@ -25,7 +25,7 @@ router.beforeEach(async (to, from) => {
     if (!token) {
       // 去登录
       return {
-        path: "/login",
+        name: "login",
         query: {
           redirect: to.fullPath,
         },

@@ -51,7 +51,6 @@ export default {
 
   &__left {
     background:rgb(84 92 100);
-    width: 200px;
   }
 
   &__right {

@@ -66,6 +66,7 @@ export default {
     }
 
     &--container {
+      padding: 10px;
       background: rgb(237, 97, 97);
       flex: 1;
     }

@@ -4,7 +4,7 @@
     <!-- 渲染左侧按钮，以及面包屑.. -->
     <div class="app-header__left">
       <div class="box2" @click="setCollapsed(!collapsed)">
-        <el-icon size="28">
+        <el-icon size="26">
           <Expand v-if="collapsed" />
           <Fold v-else />
         </el-icon>
@@ -91,7 +91,6 @@ export default {
   align-items: center;
   justify-content: center;
   display: flex;
-  background: rgb(210, 104, 104);
   cursor: pointer;
 }
 .el-breadcrumb {

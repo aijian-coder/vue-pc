@@ -69,9 +69,10 @@ export default {
     handleCancel() {
       this.$emit("cancel");
     },
+
     handleConfirm() {
       this.$emit("success");
-    },
-  },
+    }
+  }
 };
 </script>

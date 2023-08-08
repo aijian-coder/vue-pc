@@ -52,7 +52,7 @@
         </el-table>
       </div>
       <!-- 弹窗 -->
-      <el-dialog v-model="dialog.visible" :title="dialog.title" width="30%" destroy-on-close>
+      <el-dialog v-model="dialog.visible" :title="dialog.title"  destroy-on-close>
         <UpsertForm @cancel="dialog.visible=false" @success="handleSucc"/>
       </el-dialog>
     </div>

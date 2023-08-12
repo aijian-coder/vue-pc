@@ -37,7 +37,7 @@
           <el-table-column label="更新时间" prop="updateTime" />
           <el-table-column label="操作">
             <template #default="{ row }">
-              <el-button size="small" @click="handleEdit">编辑</el-button>
+              <el-button size="small" @click="handleEdit(row)">编辑</el-button>
               <!-- 此处点删除可以做一个漂亮的提示 -->
               <el-popconfirm
                 title="你确认要删除吗？"
@@ -53,7 +53,7 @@
       </div>
       <!-- 弹窗 -->
       <el-dialog v-model="dialog.visible" :title="dialog.title"  destroy-on-close>
-        <UpsertForm @cancel="dialog.visible=false" @success="handleSucc"/>
+        <UpsertForm ref="upform" @cancel="dialog.visible=false" @success="handleSucc"/>
       </el-dialog>
     </div>
   </div>
@@ -106,10 +106,24 @@ export default {
     /**
      * 编辑
      */
-    handleEdit() {
+    handleEdit(row) {
+      console.log(row);
       //弹窗新增。此处方法剥离到弹窗里面
       this.dialog.visible = true;
       this.dialog.title = "编辑";
+      // console.log(this.$refs.upform.setmodel);//获取不到DOM元素
+      //此时要用定时器延迟，但是最好的解决是vue里面的$nextTick
+      this.$nextTick(()=>{
+        // console.log(this.$refs.upform)
+        this.$refs.upform.setmodel({
+          id: row.id,
+          name: row.name,
+          label: row.label,
+          remark: row.remark,
+          menuIdList: row.menuIdList,
+        })
+      })
+
     },
 
     /**
@@ -137,10 +151,15 @@ export default {
     },
 
     /**
-     * 弹窗成功
+     * 弹窗,处理点击确定
      */
      handleSucc(){
+      ElMessage.success("成功");
+      // 刷新数据
+      this.refresh();
       this.dialog.visible=false
+      // 关闭弹窗
+
      }
   },
   created() {

@@ -1,6 +1,5 @@
 <template>
   <el-form label-width="100" ref="form" :model="model" :rules="rules">
-
     <el-row :gutter="20">
       <el-col :span="12">
         <el-form-item label="名称" prop="name">
@@ -9,7 +8,7 @@
       </el-col>
       <el-col :span="12">
         <el-form-item label="标识" prop="label">
-          <el-input placeholder="请填写标识" v-model="model.label"/>
+          <el-input placeholder="请填写标识" v-model="model.label" />
         </el-form-item>
       </el-col>
     </el-row>
@@ -17,7 +16,7 @@
     <el-row :gutter="20">
       <el-col :span="24">
         <el-form-item label="备注" prop="remark">
-          <el-input placeholder="请填写备注" v-model="model.remark"/>
+          <el-input placeholder="请填写备注" v-model="model.remark" />
         </el-form-item>
       </el-col>
     </el-row>
@@ -40,7 +39,6 @@
         </el-form-item>
       </el-col>
     </el-row>
-
   </el-form>
 </template>
 
@@ -62,17 +60,46 @@ export default {
         name: [{ required: true, message: "必填" }],
         label: [{ required: true, message: "必填" }],
       },
-
     };
   },
+
+  computed: {
+    // 是否编辑模式
+    isEditMode() {
+      return this.model.id !== 0;
+    },
+  },
+
   methods: {
     handleCancel() {
       this.$emit("cancel");
     },
+    setmodel(model){
+      //数据回显，需要上级组件传递数据model，然后用model的值，来覆盖我的this.model
+      // this.model = model;
+      // 该操作不合适，会直接覆盖到我原本的 this.model, 导致一些属性不存在了,此时会把我的id给覆盖掉
+      //借助assign赋值的运算符
+      Object.assign(this.model,model)
+      console.log(this.model);
+    },
 
-    handleConfirm() {
+    async handleConfirm() {
+      // 1. 表单校验
+      await this.$refs.form.validate();
+      if(this.isEditMode){
+        console.log("编辑");
+        //编辑
+         //调用接口 要传递一个参数
+        await updRole({...this.model})
+        }else{
+          //新增
+          console.log("编辑");
+        await  addRole({ ...this.model });
+      }
+     
+
       this.$emit("success");
-    }
-  }
+    },
+  },
 };
 </script>

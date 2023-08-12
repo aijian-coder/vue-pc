@@ -109,7 +109,7 @@ instance.interceptors.response.use(
    */
   (error) => {
     // 根据 HTTP 状态码来处理不同的业务逻辑
-    console.log("error", error);
+    // console.log("error", error);
     //    1. 获取到 HTTP 状态码
     const { status } = error.response;
     //    2. 获取中文的错误描述

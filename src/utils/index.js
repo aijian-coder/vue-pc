@@ -16,20 +16,31 @@ export function deepTree(list) {
   list.forEach((item) => {
     // 根据 item.parentId 来决定当前 item 是属于谁的子级
     // item.parentId 如果为 null 则表示为一级，直接追加到 result 中
-    if(!item.parentId){
-        result.push(map[item.id]);
-    }else{
-        //不是顶级数据，说明存在儿子，准备给父级item新增children键值对
-        //做判断。判断此父级item是否存在children键值对
-        if(map[item.parentId].children){
-            //存在children，直接push给children做新增
-            map[item.parentId].children.push(map[item.id])
-        }else{
-            //没有children，新建一个children剪子对，children的值，是一个数组
-            map[item.parentId].children=[ map[item.id]]
-        }
+    if (!item.parentId) {
+      result.push(map[item.id]);
+    } else {
+      //不是顶级数据，说明存在儿子，准备给父级item新增children键值对
+      //做判断。判断此父级item是否存在children键值对
+      if (map[item.parentId].children) {
+        //存在children，直接push给children做新增
+        map[item.parentId].children.push(map[item.id]);
+      } else {
+        //没有children，新建一个children剪子对，children的值，是一个数组
+        map[item.parentId].children = [map[item.id]];
+      }
     }
-   
   });
-  return  result
+  return result;
+}
+
+/**
+ * 判断 id 是否为叶子节点
+ * @param {Array} list :Array
+ * @param {*} id :string
+ * @returns {boolean}
+ *    true   则表示为 叶子节点
+ *    false  则表示为 非叶子节点
+ */
+export function isLeaf(list, id) {
+  return list.every((item) => item.parentId !== id);
 }

@@ -52,7 +52,7 @@
         </el-table>
       </div>
       <!-- 弹窗 -->
-      <el-dialog v-model="dialog.visible" :title="dialog.title"  destroy-on-close>
+      <el-dialog v-model="dialog.visible" :title="dialog.title"  destroy-on-close style="width: 800px; border-radius: 5px; " class="el-dialog">
         <UpsertForm ref="upform" @cancel="dialog.visible=false" @success="handleSucc"/>
       </el-dialog>
     </div>
@@ -75,7 +75,7 @@ export default {
       tableData: [],
       checkedIds: [],
       dialog: {
-        visible: true,
+        visible: false,
         title: "新增",
       },
     };
@@ -107,7 +107,7 @@ export default {
      * 编辑
      */
     handleEdit(row) {
-      console.log(row);
+      // console.log(row);
       //弹窗新增。此处方法剥离到弹窗里面
       this.dialog.visible = true;
       this.dialog.title = "编辑";
@@ -187,4 +187,6 @@ export default {
     }
   }
 }
+
+
 </style>

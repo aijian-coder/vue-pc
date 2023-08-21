@@ -14,7 +14,7 @@ import "./global.scss"
 
 const app=createApp(App)
 
-// 将 icon 图标组件全部都被注册
+// 将 icon 图标组件全部都注册
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component);
   }

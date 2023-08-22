@@ -12,6 +12,9 @@ import router from "./router";
 //导入一个全局清除样式的Scss文件
 import "./global.scss"
 
+// 引入 components 插件
+import components from "./components";
+
 const app=createApp(App)
 
 // 将 icon 图标组件全部都注册
@@ -19,4 +22,4 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component);
   }
 
-app.use(ElementPlus).use(router).use(store).mount('#app')
+app.use(ElementPlus).use(router).use(store).use(components).mount('#app')

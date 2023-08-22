@@ -29,21 +29,43 @@
           border
           @selection-change="handleSelectionChange"
         >
-          <el-table-column type="selection" width="55" />
-          <el-table-column label="头像" prop="headImg" >
-            <template #default="{row}">
+          <el-table-column type="selection" width="55" align="center" />
+          <el-table-column label="头像" prop="headImg" align="center">
+            <template #default="{ row }">
               <img class="avatar" :src="row.headImg" />
             </template>
           </el-table-column>
-          <el-table-column label="用户名" prop="username" />
-          <el-table-column label="姓名" prop="name" />
-          <el-table-column label="昵称" prop="nickName" />
-          <el-table-column label="角色" prop="roleName"/>
-          <el-table-column label="状态" prop="status"/>
-          <el-table-column label="手机号码" prop="phone"/>
-          <el-table-column label="备注" prop="remark"/>
-          <el-table-column label="创建时间" prop="createTime"/>
-          <el-table-column label="操作">
+          <el-table-column label="用户名" prop="username" align="center" />
+          <el-table-column label="姓名" prop="name" align="center" />
+          <el-table-column label="昵称" prop="nickName" align="center" />
+          <el-table-column label="角色" prop="roleName" align="center" >
+            <template #default="{row}">
+              <el-tag v-for="item in row.roleName.split(',')">{{item}}</el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column label="状态" prop="status" align="center">
+            <template #default="{ row }">
+              <!-- 插槽传递的row就是一整行所有的数据值，是一个代理对象数据 -->
+              <!-- 此处要进行数据双向绑定 -->
+              <el-switch
+                :modelValue="!!row.status"
+                @update:modelValue="handelUpStatus($event, row)"
+                style="
+                  --el-switch-on-color: #13ce66;
+                  --el-switch-off-color: #ff4949;
+                "
+              />
+            </template>
+          </el-table-column>
+          <el-table-column label="手机号码" prop="phone" align="center"   width="120"/>
+          <el-table-column label="备注" prop="remark" align="center" />
+          <el-table-column label="创建时间" prop="createTime" align="center" width="180"/>
+          <el-table-column
+            label="操作"
+            fixed="right"
+            width="160"
+            align="center"
+          >
             <template #default="{ row }">
               <el-button size="small" @click="handleEdit(row)">编辑</el-button>
               <!-- 此处点删除可以做一个漂亮的提示 -->
@@ -60,35 +82,65 @@
         </el-table>
       </div>
       <!-- 弹窗 -->
-      <el-dialog v-model="dialog.visible" :title="dialog.title"  destroy-on-close style="width: 800px; border-radius: 5px; " class="el-dialog">
-        <UpsertForm ref="upform" @cancel="dialog.visible=false" @success="handleSucc"/>
+      <el-dialog
+        v-model="dialog.visible"
+        :title="dialog.title"
+        destroy-on-close
+        style="width: 800px; border-radius: 5px"
+        class="el-dialog"
+      >
+        <UpsertForm
+          ref="upform"
+          @cancel="dialog.visible = false"
+          @success="handleSucc"
+        />
       </el-dialog>
     </div>
   </div>
 </template>
 <script>
-import { getUserPage } from "@/api/user";
+import { getUserPage, updUser, delUser } from "@/api/user";
 import { ElMessage } from "element-plus";
-import UpsertForm from "./components/update_form.vue"
+import UpsertForm from "./components/update_form.vue";
 
 export default {
-  name: "RoleList",
-  components:{
-    UpsertForm  
+  name: "UserList",
+  components: {
+    UpsertForm,
   },
   data() {
     return {
       // 数据请求中
-      loading: false,
+      loading: false,//加载状态
       tableData: [],
-      checkedIds: [],
+      total: 0, // 数据总条数
+      checkedIds: [],//选中的id值
       dialog: {
-        visible: false,
+        visible: true,
         title: "新增",
+      },
+      // 查询相关的参数,此处调用分页接口，要传参
+      query: {
+        page: 1, // 当前页码
+        size: 2, // 每页显示条数
       },
     };
   },
   methods: {
+    /**
+     * 设置状态变化
+     */
+    handelUpStatus(value, row) {
+      console.log(value, row);
+      updUser({
+        id: row.id,
+        status: value ? 1 : 0,
+      }).then(() => {
+        ElMessage.success("更新成功");
+        this.refresh();
+      });
+    },
+
     /**
      * 获取数据，并用新数据调用接口
      */
@@ -115,23 +167,20 @@ export default {
      * 编辑
      */
     handleEdit(row) {
-      // console.log(row);
+      console.log(row); 
       //弹窗新增。此处方法剥离到弹窗里面
       this.dialog.visible = true;
       this.dialog.title = "编辑";
       // console.log(this.$refs.upform.setmodel);//获取不到DOM元素
       //此时要用定时器延迟，但是最好的解决是vue里面的$nextTick
-      this.$nextTick(()=>{
+      this.$nextTick(() => {
         // console.log(this.$refs.upform)
         this.$refs.upform.setmodel({
-          id: row.id,
-          name: row.name,
-          label: row.label,
-          remark: row.remark,
-          menuIdList: row.menuIdList,
-        })
-      })
-
+          ...row,
+          // 接口传过来的值是“ , ”黏在一起字符串，要切开，搞成数组
+          roleIdList: row.roleIdList.split(",").map((id) => +id),
+        });
+      });
     },
 
     /**
@@ -140,7 +189,7 @@ export default {
     handleDelete(checkedId) {
       console.log(checkedId);
       //有可能是多选的删除，也有可能是单个的，此处调用接口，传递的是一个id的数组
-      delRole({ ids: Array.isArray(checkedId) ? checkedId : [checkedId] }).then(
+      delUser({ ids: Array.isArray(checkedId) ? checkedId : [checkedId] }).then(
         () => {
           this.refresh(), ElMessage.success("删除成功");
         }
@@ -161,14 +210,13 @@ export default {
     /**
      * 弹窗,处理点击确定
      */
-     handleSucc(){
+    handleSucc() {
       ElMessage.success("成功");
       // 刷新数据
       this.refresh();
-      this.dialog.visible=false
+      this.dialog.visible = false;
       // 关闭弹窗
-
-     }
+    },
   },
   created() {
     this.refresh();
@@ -196,10 +244,9 @@ export default {
   }
 }
 
-.avatar{
+.avatar {
   width: 40px;
   height: 40px;
   border-radius: 50%;
 }
-
 </style>

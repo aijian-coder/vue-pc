@@ -1,15 +1,57 @@
 <template>
-  <div >
+  <div>
     <el-form label-width="100" ref="form" :model="model" :rules="rules">
       <el-row :gutter="20">
+        <el-col :span="24">
+          <el-form-item label="头像" prop="headImg">
+            <AvatarUploader v-model="model.headImg" />
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item label="名称" prop="name">
-            <el-input placeholder="请填写名称" v-model="model.name" />
+          <el-form-item label="姓名" prop="name">
+            <el-input placeholder="请填写姓名" v-model="model.name" />
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="标识" prop="label">
-            <el-input placeholder="请填写标识" v-model="model.label" />
+          <el-form-item label="昵称" prop="nickName">
+            <el-input placeholder="请填写昵称" v-model="model.nickName" />
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form-item label="用户名" prop="username">
+            <el-input placeholder="请填写用户名" v-model="model.username" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="密码" prop="password">
+            <el-input placeholder="请填写密码" v-model="model.password" />
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row :gutter="20">
+        <el-col :span="24">
+          <el-form-item label="角色"  prop="roleIdList">
+            <SelectRole v-model="model.roleIdList" />
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form-item label="手机号码" prop="phone">
+            <el-input placeholder="请填写手机号码" v-model="model.phone" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="邮箱" prop="email">
+            <el-input placeholder="请填写邮箱" v-model="model.email" />
           </el-form-item>
         </el-col>
       </el-row>
@@ -17,15 +59,24 @@
       <el-row :gutter="20">
         <el-col :span="24">
           <el-form-item label="备注" prop="remark">
-            <el-input placeholder="请填写备注" v-model="model.remark" type="textarea" style="min-height: 31px"/>
+            <el-input
+              placeholder="请填写备注"
+              v-model="model.remark"
+              type="textarea"
+              style="min-height: 31px"
+              rows="4"
+            />
           </el-form-item>
         </el-col>
       </el-row>
 
       <el-row :gutter="20">
         <el-col :span="24">
-          <el-form-item label="功能权限">
-            <MenuCheck ref="MenuCheck" @ok="handelOk"/>
+          <el-form-item label="状态">
+            <el-radio-group v-model="model.status">
+              <el-radio :label="1">开启</el-radio>
+              <el-radio :label="0">关闭</el-radio>
+            </el-radio-group>
           </el-form-item>
         </el-col>
       </el-row>
@@ -47,27 +98,31 @@
 </template>
 
 <script>
-import { addRole, updRole } from "@/api/role";
-import MenuCheck from "@/components/menu-check/index.vue"
+import { addUser, updUser } from "@/api/user";
+// import AvatarUploader from "@/components/avatar-uploader/index.vue";
 //导入写好的权限组件，权限组件是一个组件树
 
 export default {
   name: "UpsertForm",
-  components:{
-    MenuCheck
-  },
+
+  // components: {
+  //   AvatarUploader,
+  // },
+
   data() {
     return {
       model: {
-        id: 0, // 为 0 为新增，否则为编辑
-        name: "",
-        label: "",
-        remark: "",
-        menuIdList: [],
-      },
-      rules: {
-        name: [{ required: true, message: "必填" }],
-        label: [{ required: true, message: "必填" }],
+        id: 0,
+        headImg: "", // 头像
+        name: "", // 姓名 必填
+        nickName: "", // 昵称 必填
+        username: "", // 用户名 必填
+        password: "", // 密码  必填
+        roleIdList: [], // 角色ID列表  必填
+        status: 1, // 状态 0-关闭 1-开启  必填
+        remark: "", // 备注
+        email: "", // 邮箱
+        phone: "", // 手机号码
       },
     };
   },
@@ -77,14 +132,28 @@ export default {
     isEditMode() {
       return this.model.id !== 0;
     },
+    //规则
+    rules() {
+      return {
+        name: [{ required: true, message: "必填" }],
+        nickName: [{ required: true, message: "必填" }],
+        username: [{ required: true, message: "必填" }],
+        roleIdList: [{ required: true, message: "必填" }],
+
+        // 编辑模式修改密码非必填
+        password: [{ required: !this.isEditMode, message: "必填" }],
+        phone: [{ pattern: /^1\d{10}$/, message: "请输入正确的手机号码" }], //11位以1开头的数字
+        email: [{ type: "email", message: "请输入正确的邮箱" }],
+      };
+    },
   },
 
   methods: {
     handleCancel() {
       this.$emit("cancel");
     },
-    handelOk(){
-      this.$refs.MenuCheck.set(this.model.menuIdList)
+    handelOk() {
+      this.$refs.MenuCheck.set(this.model.menuIdList);
     },
     setmodel(model) {
       //数据回显，需要上级组件传递数据model，然后用model的值，来覆盖我的this.model
@@ -95,24 +164,22 @@ export default {
       // console.log(this.model.menuIdList.Array.form);
       //是异步的，set函数里面还没搞完
       // this.$refs.MenuCheck.set(model.menuIdList)
-
     },
 
     async handleConfirm() {
       // 1. 表单校验
       await this.$refs.form.validate();
       //获取MenuCheck的里面的menuList的值
-      const menuIdList =this.$refs.MenuCheck.get()
-      console.log(menuIdList);
       if (this.isEditMode) {
         // console.log("编辑");
         //编辑
         //调用接口 要传递一个参数
-        await updRole({ ...this.model,menuIdList });
+        await updUser(this.model);
       } else {
         //新增
-        console.log("编辑");
-        await addRole({ ...this.model,menuIdList });
+        // 新增
+        const { id, ...model } = this.model;
+        await addUser(model);
       }
 
       this.$emit("success");
@@ -120,5 +187,3 @@ export default {
   },
 };
 </script>
-
-

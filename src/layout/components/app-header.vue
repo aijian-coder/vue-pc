@@ -4,7 +4,7 @@
     <!-- 渲染左侧按钮，以及面包屑.. -->
     <div class="app-header__left">
       <div class="box2" @click="setCollapsed(!collapsed)">
-        <el-icon size="26">
+        <el-icon size="24">
           <Expand v-if="collapsed" />
           <Fold v-else />
         </el-icon>

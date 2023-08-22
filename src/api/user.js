@@ -44,3 +44,26 @@ export function getUserList() {
 export function getUserPage() {
   return request.post("/admin/base/sys/user/page");
 }
+
+/**
+ * 用户修改
+ */
+export function updUser(data) {
+  return request.post("/admin/base/sys/user/update", data);
+}
+
+
+/**
+ * 用户删除
+ */
+export function delUser(data) {
+  return request.post("/admin/base/sys/user/delete", data);
+}
+
+
+/**
+ * 用户新增
+ */
+export function addUser(data) {
+  return request.post("/admin/base/sys/user/add", data);
+}

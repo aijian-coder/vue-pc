@@ -116,7 +116,7 @@ export default {
       total: 0, // 数据总条数
       checkedIds: [],//选中的id值
       dialog: {
-        visible: true,
+        visible: false,
         title: "新增",
       },
       // 查询相关的参数,此处调用分页接口，要传参

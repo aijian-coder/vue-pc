@@ -1,7 +1,7 @@
 <template>
   <div>工作台</div>
   <hr />
-  <SelectRole />
+  <SelectRole v-model="roleIdList" :limit="2"/>
   <hr />
   <AvatarUploader
     v-model="headImg"

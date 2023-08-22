@@ -10,7 +10,8 @@
         </el-icon>
       </div>
       <el-breadcrumb separator="/">
-        <el-breadcrumb-item>工作台</el-breadcrumb-item>
+        <el-breadcrumb-item @click="handelChange"
+        > 工作台</el-breadcrumb-item>
         <el-breadcrumb-item>组件库</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
@@ -39,6 +40,8 @@
 </template>
 <script>
 import { mapMutations, mapState, mapActions } from "vuex";
+// 动态导入多个模块
+const modules = import.meta.glob(["../../views/**/*.vue", "!../../views/**/components/*.vue"]);
 export default {
   name: "app-header",
   computed: {
@@ -50,6 +53,9 @@ export default {
     ...mapMutations("app", ["setCollapsed"]),
     handleLogout(){
         this.$store.dispatch("user/logout");
+    },
+    handelChange(){
+      console.log(modules);
     }
   },
 };

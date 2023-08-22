@@ -37,9 +37,9 @@
 
       <el-row :gutter="20">
         <el-col :span="24">
-          <el-form-item label="角色"  prop="roleIdList">
+          <el-form-item label="角色"  prop="roleIdList" >
             <SelectRole v-model="model.roleIdList" />
-          </el-form-item>
+          </el-form-item  >
         </el-col>
       </el-row>
 
@@ -64,7 +64,7 @@
               v-model="model.remark"
               type="textarea"
               style="min-height: 31px"
-              rows="4"
+         
             />
           </el-form-item>
         </el-col>
@@ -169,6 +169,8 @@ export default {
     async handleConfirm() {
       // 1. 表单校验
       await this.$refs.form.validate();
+      // console.log(this.model);
+      // return false;
       //获取MenuCheck的里面的menuList的值
       if (this.isEditMode) {
         // console.log("编辑");
